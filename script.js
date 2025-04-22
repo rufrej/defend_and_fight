@@ -1,0 +1,72 @@
+const canvas = document.querySelector("#game");
+const context = canvas.getContext("2d");
+const crossbow = document.querySelector(".crossbow");
+
+const CANVAS_WIDTH = (canvas.width = 1400);
+const CANVAS_HEIGHT = (canvas.height = 800);
+
+const arrows = [];
+const enemies = [];
+
+let boxBoundingRect = crossbow.getBoundingClientRect();
+
+let boxCenter = {
+  x: boxBoundingRect.left + boxBoundingRect.width / 2,
+  y: boxBoundingRect.top + boxBoundingRect.height / 2,
+};
+
+let angle = null;
+
+const bg = new Image();
+bg.src = "assets/fort.png";
+const dino = new Image();
+dino.src = "assets/dino.png";
+
+let gameFrame = 0;
+
+document.addEventListener("mousemove", (e) => {
+  angle =
+    Math.atan2(e.pageX - boxCenter.x, -(e.pageY - boxCenter.y)) *
+    (180 / Math.PI);
+  if (angle <= 20) angle = 20;
+  if (angle >= 160) angle = 160;
+
+  crossbow.style.transform = `rotate(${angle}deg)`;
+});
+
+function game() {
+  update();
+  render();
+
+  requestAnimationFrame(game);
+}
+
+function update() {
+  gameFrame++;
+
+  if (gameFrame % 150 == 0) {
+    enemies.push({
+      x: 1300,
+      y: 300,
+    });
+  }
+
+  // движение
+  for (let item in enemies) {
+    enemies[item].x = enemies[item].x - 3;
+
+    //границы
+    if (enemies[item].x <= 135) {
+      enemies.splice(item, 1); //  удаление
+    }
+  }
+}
+
+function render() {
+  context.drawImage(bg, 0, 0, 1400, 800);
+  for (let i in enemies) {
+    context.drawImage(dino, enemies[i].x, enemies[i].y, 60, 40);
+  }
+}
+
+game();
