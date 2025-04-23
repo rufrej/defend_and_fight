@@ -1,3 +1,5 @@
+import { Enemies } from "./models.js";
+
 const canvas = document.querySelector("#game");
 const context = canvas.getContext("2d");
 const crossbow = document.querySelector(".crossbow");
@@ -6,7 +8,7 @@ const CANVAS_WIDTH = (canvas.width = 1400);
 const CANVAS_HEIGHT = (canvas.height = 800);
 
 const arrows = [];
-const enemies = [];
+const greenGoblins = [];
 
 let boxBoundingRect = crossbow.getBoundingClientRect();
 
@@ -19,9 +21,8 @@ let angle = null;
 
 const bg = new Image();
 bg.src = "assets/fort.png";
-const dino = new Image();
-dino.src = "assets/dino.png";
 
+let greenGoblin = new Enemies(context, "assets/enemies/gob.png");
 let gameFrame = 0;
 
 document.addEventListener("mousemove", (e) => {
@@ -44,28 +45,40 @@ function game() {
 function update() {
   gameFrame++;
 
+  //спавним врага
   if (gameFrame % 150 == 0) {
-    enemies.push({
+    greenGoblins.push({
       x: 1300,
       y: 300,
+      health: 100,
+      animation: "run",
+      deleteFlag: 0,
+      damage: 50,
     });
   }
 
+  greenGoblin.animate(gameFrame);
+
   // движение
-  for (let item in enemies) {
-    enemies[item].x = enemies[item].x - 3;
+  for (let item in greenGoblins) {
+    greenGoblins[item].x = greenGoblins[item].x - 3;
 
     //границы
-    if (enemies[item].x <= 135) {
-      enemies.splice(item, 1); //  удаление
+    if (greenGoblins[item].x <= 135) {
+      greenGoblins.splice(item, 1); //  удаление
     }
   }
 }
 
 function render() {
   context.drawImage(bg, 0, 0, 1400, 800);
-  for (let i in enemies) {
-    context.drawImage(dino, enemies[i].x, enemies[i].y, 60, 40);
+  for (let i in greenGoblins) {
+    greenGoblin.render(
+      greenGoblins[i].x,
+      greenGoblins[i].y,
+      greenGoblins[i].animation,
+      greenGoblins[i].health
+    );
   }
 }
 
