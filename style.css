@@ -36,6 +36,14 @@ body {
   display: block;
   left: -7%;
   top: 42.5%;
-
   user-select: none;
+}
+
+.button-pause {
+  user-select: none;
+  padding: 10px 20px;
+  position: fixed;
+
+  right: -7%;
+  top: 1%;
 }
