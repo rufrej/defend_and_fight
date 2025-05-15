@@ -1,15 +1,55 @@
-import { Enemies } from "./models.js";
+import { redDemon, flyDemon, smallDemon, greenGoblin } from "./enemies.js";
+import {
+  canvas,
+  context,
+  buttonPause,
+  crossbow,
+  boxCenter,
+  arrows,
+  coin,
+  bg,
+  expl,
+  fireball,
+} from "./declarations.js";
 
-import { paused, togglePause, degreesToRadians } from "./helpers.js";
+import {
+  paused,
+  togglePause,
+  degreesToRadians,
+  drawArrow,
+  draw,
+  buildLineEnemies,
+} from "./helpers.js";
 
-const canvas = document.querySelector("#game");
-const context = canvas.getContext("2d");
-const crossbow = document.querySelector(".crossbow");
+import { playSoundShot, playSoundHurt, playSoundDamage } from "./sounds.js";
 
-const CANVAS_WIDTH = (canvas.width = 1400);
-const CANVAS_HEIGHT = (canvas.height = 800);
+import {
+  redDemonParameters,
+  flyDemonParameters,
+  smallDemonParameters,
+  greenGoblinParameters,
+} from "./enemies.js";
 
-const buttonPause = document.querySelector("#buttonPause");
+let angle = null;
+
+let coolDown = false;
+
+let rechargeTime = 500;
+
+let arrowsSpeed = 30;
+
+let gameFrame = 0;
+
+let towerHealth = 100;
+
+let towerHealthStrip = 120;
+
+let arrowDamege = 50;
+
+let coins = 0;
+let enemies = [];
+let deadEnemies = [];
+let distanceAttacks = [];
 
 window.addEventListener("keydown", function (e) {
   const key = e.keyCode;
@@ -19,26 +59,6 @@ window.addEventListener("keydown", function (e) {
 });
 
 buttonPause.addEventListener("click", togglePause);
-
-const arrows = [];
-const greenGoblins = [];
-const deadsgreenGoblins = [];
-let boxBoundingRect = crossbow.getBoundingClientRect();
-
-let boxCenter = {
-  x: boxBoundingRect.left + boxBoundingRect.width / 2,
-  y: boxBoundingRect.top + boxBoundingRect.height / 2,
-};
-
-let angle = null;
-let coolDown = false;
-let rechargeTime = 500;
-
-const bg = new Image();
-bg.src = "assets/fort.png";
-
-let greenGoblin = new Enemies(context, "assets/enemies/gob.png");
-let gameFrame = 0;
 
 document.addEventListener("mousemove", (e) => {
   angle =
@@ -57,19 +77,25 @@ function shot() {
 
     if (coolDown == false) {
       let timerId = setTimeout(function tick() {
-        arrows.push({
-          x: 80,
-          y: 390,
-          speed: 15,
-          direction: angle - 90,
-        });
+        if (paused == false) {
+          playSoundShot();
 
-        coolDown = true;
-        setTimeout(() => {
-          coolDown = false;
-        }, rechargeTime);
+          arrows.push({
+            x: 80,
+            y: 390,
+            speed: arrowsSpeed,
+            direction: angle - 90,
+          });
 
-        timerId = setTimeout(tick, rechargeTime);
+          crossbow.style.animation = `reloaded 0.${rechargeTime}s linear infinite`;
+          coolDown = true;
+          setTimeout(() => {
+            coolDown = false;
+            crossbow.style.animation = ``;
+          }, rechargeTime);
+
+          timerId = setTimeout(tick, rechargeTime);
+        }
       }, 20);
 
       canvas.addEventListener("mouseup", () => {
@@ -78,27 +104,6 @@ function shot() {
       });
     }
   }
-}
-
-function drawArrow(context, fromx, fromy, tox, toy) {
-  let headlen = 10; // length of head in pixels
-  let dx = tox - fromx;
-  let dy = toy - fromy;
-  let angle = Math.atan2(dy, dx);
-  context.lineWidth = 3;
-  context.strokeStyle = "rgba(151, 152, 154, 0.99)";
-  context.moveTo(fromx, fromy);
-  context.lineTo(tox, toy);
-
-  context.lineTo(
-    tox - headlen * Math.cos(angle - Math.PI / 6),
-    toy - headlen * Math.sin(angle - Math.PI / 6)
-  );
-  context.moveTo(tox, toy);
-  context.lineTo(
-    tox - headlen * Math.cos(angle + Math.PI / 6),
-    toy - headlen * Math.sin(angle + Math.PI / 6)
-  );
 }
 
 canvas.addEventListener("mousedown", shot);
@@ -111,22 +116,53 @@ function game() {
   requestAnimationFrame(game);
 }
 
+// function buildLineEnemies(quantity, gap, enemy) {
+//   let centerCoord = 400;
+//   let indentTop = gap;
+//   let indentButton = gap;
+//   const enem = Object.assign({}, enemy);
+//   enem.y = centerCoord;
+//   enemies.push(enem);
+//   for (let i = 1; i <= quantity - 1; i++) {
+//     const enem = Object.assign({}, enemy);
+
+//     if (i % 2 == 0) {
+//       enem.y = centerCoord + indentTop;
+
+//       indentTop += gap;
+//     } else {
+//       enem.y = centerCoord - indentButton;
+//       indentButton -= -gap;
+//     }
+
+//     enemies.push(enem);
+//     enemies.sort((next, prev) => next.y - prev.y);
+//   }
+// }
+
 function update() {
   gameFrame++;
-
   //спавним врага
-  if (gameFrame % 150 == 0) {
-    greenGoblins.push({
-      x: 1300,
-      y: 300,
-      health: 100,
-      animation: "run",
-      deleteFlag: 0,
-      damage: 50,
-    });
+  if (gameFrame == 100) {
+    buildLineEnemies(enemies, 6, 80, greenGoblinParameters);
+  }
+  //спавним врага
+  if (gameFrame == 200) {
+    buildLineEnemies(enemies, 6, 80, flyDemonParameters);
+  }
+  //спавним врага
+  if (gameFrame == 300) {
+    buildLineEnemies(enemies, 6, 80, smallDemonParameters);
+  }
+  //спавним врага
+  if (gameFrame == 400) {
+    buildLineEnemies(enemies, 6, 80, redDemonParameters);
   }
 
   greenGoblin.animate(gameFrame);
+  redDemon.animate(gameFrame);
+  smallDemon.animate(gameFrame);
+  flyDemon.animate(gameFrame);
 
   //физика стрелы
   for (let i in arrows) {
@@ -137,48 +173,105 @@ function update() {
   }
 
   // движение
-  for (let item in greenGoblins) {
-    greenGoblins[item].x = greenGoblins[item].x - 3;
+  for (let item in enemies) {
+    enemies[item].x = enemies[item].x - enemies[item].speed;
 
     //границы
-    if (greenGoblins[item].x <= 135) {
-      // let random = Math.floor(Math.random() * 10 - 5);
-      // greenGoblins[item].y = greenGoblins[item].y + random;
-      // greenGoblins[item].x = 135; // остановка
-      // greenGoblins[item].animation = "hit";
-      greenGoblins.splice(item, 1); //  удаление
+    if (enemies[item].x <= 135) {
+      enemies[item].x = 135; // остановка
+      enemies[item].animation = "hit";
+      // enemies.splice(item, 1); //  удаление
 
       // анимация атаки
+
+      if (gameFrame % 50 == 0) {
+        towerHealth = towerHealth - enemies[item].damage;
+        let damage = towerHealth / enemies[item].damage;
+        towerHealthStrip -= towerHealthStrip / damage;
+        playSoundDamage();
+      }
+    }
+    // дистанционные атаки
+    if (enemies[item].type == flyDemon) {
+      if (enemies[item].x <= 635) {
+        enemies[item].x = 635; // остановка
+        enemies[item].animation = "hit";
+        // enemies.splice(item, 1); //  удаление
+
+        // анимация атаки
+
+        if (gameFrame % 100 == 0) {
+          let coordX = enemies[item].x;
+          let coordY = enemies[item].y;
+          distanceAttacks.push({
+            x: coordX,
+            y: coordY,
+            animX: null,
+            speed: 6,
+            damage: enemies[item].damage,
+          });
+        }
+      }
     }
 
     // проверка на попадание стрелы
     for (let j in arrows) {
       if (
-        Math.abs(greenGoblins[item].x - arrows[j].x) < 20 &&
-        Math.abs(greenGoblins[item].y + 50 - arrows[j].y) < 35
+        Math.abs(enemies[item].x + 30 - arrows[j].x) < 20 &&
+        Math.abs(enemies[item].y + 70 - arrows[j].y) < enemies[item].size
       ) {
         arrows.splice(j, 1);
-        greenGoblins[item].health = greenGoblins[item].health - 50;
-        if (greenGoblins[item].health <= 0) greenGoblins[item].deleteFlag = 1;
+        playSoundHurt();
+        enemies[item].health -= arrowDamege;
+        let damage = enemies[item].health / arrowDamege;
+        enemies[item].healthStrip -= enemies[item].healthStrip / damage;
+
+        if (enemies[item].health <= 0) enemies[item].deleteFlag = 1;
+
         break;
       }
     }
-    if (greenGoblins[item].deleteFlag == 1) {
-      let deadCoordX = greenGoblins[item].x;
-      let deadCoordY = greenGoblins[item].y;
-      deadsgreenGoblins.push({ x: deadCoordX, y: deadCoordY, animX: 0 });
-      greenGoblins.splice(item, 1);
+    if (enemies[item].deleteFlag == 1) {
+      let deadCoordX = enemies[item].x;
+      let deadCoordY = enemies[item].y;
+      deadEnemies.push({
+        type: enemies[item].type,
+        x: deadCoordX,
+        y: deadCoordY,
+        animX: 0,
+      });
+      coins += enemies[item].award;
+      enemies.splice(item, 1);
+    }
+  }
+
+  // дистанционные атаки
+  for (let i in distanceAttacks) {
+    if (gameFrame % 15 == 0) {
+      distanceAttacks[i].animX = distanceAttacks[i].animX + 1;
+    }
+    if (distanceAttacks[i].animX > 7) distanceAttacks.splice(i, 1);
+  }
+
+  for (let i in distanceAttacks) {
+    distanceAttacks[i].x -= distanceAttacks[i].speed * 2;
+    if (distanceAttacks[i].x <= 110) {
+      towerHealth = towerHealth - distanceAttacks[i].damage;
+      let damage = towerHealth / distanceAttacks[i].damage;
+      towerHealthStrip -= towerHealthStrip / damage;
+      playSoundDamage();
+      distanceAttacks.splice(i, 1);
     }
   }
 
   // анимация смерти
 
-  for (let d in deadsgreenGoblins) {
+  for (let d in deadEnemies) {
     if (gameFrame % 8 == 0) {
-      deadsgreenGoblins[d].animX = deadsgreenGoblins[d].animX + 1;
+      deadEnemies[d].animX = deadEnemies[d].animX + 1;
     }
 
-    if (deadsgreenGoblins[d].animX > 5) deadsgreenGoblins.splice(d, 1);
+    if (deadEnemies[d].animX > 6) deadEnemies.splice(d, 1);
   }
 
   for (let item in arrows) {
@@ -188,20 +281,41 @@ function update() {
     }
   }
 }
+function draftHeath() {
+  context.strokeStyle = "white";
+  context.lineWidth = 2;
+  context.strokeRect(20, 740, 122, 30);
+  context.fillStyle = "red";
+  context.fillRect(21, 741, towerHealthStrip, 28);
+
+  context.font = "25px Comic Sans MS";
+  context.fillStyle = "white";
+  context.fillText(towerHealth, 60, 765);
+}
+
+function draftCoins() {
+  context.drawImage(coin, 1250, 725, 50, 50);
+  context.font = "30px Comic Sans MS";
+  context.fillStyle = "gold";
+  context.fillText(coins, 1300, 760);
+}
 
 function render() {
   context.drawImage(bg, 0, 0, 1400, 800);
-  for (let i in greenGoblins) {
-    greenGoblin.render(
-      greenGoblins[i].x,
-      greenGoblins[i].y,
-      greenGoblins[i].animation,
-      greenGoblins[i].health
+
+  draftHeath();
+  draftCoins();
+
+  for (let i in enemies) {
+    enemies[i].type.render(
+      enemies[i].x,
+      enemies[i].y,
+      enemies[i].animation,
+      enemies[i].healthStrip
     );
   }
 
   for (let i in arrows) {
-    const angl = angle;
     context.beginPath();
     drawArrow(
       context,
@@ -213,11 +327,25 @@ function render() {
     context.stroke();
   }
 
-  for (let i in deadsgreenGoblins) {
-    greenGoblin.dead(
-      deadsgreenGoblins[i].x,
-      deadsgreenGoblins[i].y,
-      deadsgreenGoblins[i].animX
+  for (let i in distanceAttacks) {
+    draw(
+      context,
+      expl,
+      803,
+      109,
+      100,
+      distanceAttacks[i].animX,
+      100,
+      100,
+      distanceAttacks[i].x,
+      distanceAttacks[i].y
+    );
+  }
+  for (let i in deadEnemies) {
+    deadEnemies[i].type.dead(
+      deadEnemies[i].x,
+      deadEnemies[i].y,
+      deadEnemies[i].animX
     );
   }
 }

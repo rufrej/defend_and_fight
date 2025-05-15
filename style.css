@@ -47,3 +47,21 @@ body {
   right: -7%;
   top: 1%;
 }
+
+@keyframes reloaded {
+  0% {
+    content: url(assets/crossbow/с1.png);
+  }
+  25% {
+    content: url(assets/crossbow/с2.png);
+  }
+  50% {
+    content: url(assets/crossbow/с3.png);
+  }
+  75% {
+    content: url(assets/crossbow/с4.png);
+  }
+  100% {
+    content: url(assets/crossbow/с5.png);
+  }
+}
