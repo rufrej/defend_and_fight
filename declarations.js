@@ -18,12 +18,12 @@ let boxCenter = {
 const arrows = [];
 
 const coin = new Image();
-coin.src = "assets/coin.png";
+coin.src = "assets/coin.avif";
 
 const bg = new Image();
-bg.src = "assets/fort.png";
+bg.src = "assets/fort.avif";
 const expl = new Image();
-expl.src = "assets/enemies/explo.png";
+expl.src = "assets/enemies/expl.avif";
 // const fireball = new Image();
 // fireball.src = "assets/enemies/fireball.gif";
 

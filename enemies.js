@@ -20,7 +20,7 @@ import { Enemies } from "./models.js";
 
 const greenGoblin = new Enemies(
   context,
-  "assets/enemies/gob.png",
+  "assets/enemies/gob.avif",
   1360, //   indentLeft
   192, //   spriteSize
   120, //   size
@@ -37,7 +37,7 @@ const greenGoblin = new Enemies(
 
 const redDemon = new Enemies(
   context,
-  "assets/enemies/redDemon.png",
+  "assets/enemies/redDemon.avif",
   1358, //   indentLeft
   192, //   spriteSize
   130, //   size
@@ -54,7 +54,7 @@ const redDemon = new Enemies(
 
 const smallDemon = new Enemies(
   context,
-  "assets/enemies/smallDemon.png",
+  "assets/enemies/smallDemon.avif",
   1358, //   indentLeft
   192, //   spriteSize
   130, //   size
@@ -70,7 +70,7 @@ const smallDemon = new Enemies(
 );
 const flyDemon = new Enemies(
   context,
-  "assets/enemies/flyDemon.png",
+  "assets/enemies/flyDemon.avif",
   1358, //   indentLeft
   192, //   spriteSize
   130, //   size

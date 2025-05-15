@@ -1,3 +1,5 @@
+import { context, coin } from "./declarations.js";
+
 let paused = false;
 
 function togglePause() {
@@ -81,6 +83,24 @@ function buildLineEnemies(array, quantity, gap, enemy) {
     array.sort((next, prev) => next.y - prev.y);
   }
 }
+function draftHeath(towerHealth, towerHealthStrip) {
+  context.strokeStyle = "white";
+  context.lineWidth = 2;
+  context.strokeRect(20, 740, 122, 30);
+  context.fillStyle = "red";
+  context.fillRect(21, 741, towerHealthStrip, 28);
+
+  context.font = "25px Comic Sans MS";
+  context.fillStyle = "white";
+  context.fillText(towerHealth, 60, 765);
+}
+
+function draftCoins(coins) {
+  context.drawImage(coin, 1250, 725, 50, 50);
+  context.font = "30px Comic Sans MS";
+  context.fillStyle = "gold";
+  context.fillText(coins, 1300, 760);
+}
 
 export {
   paused,
@@ -89,4 +109,6 @@ export {
   drawArrow,
   draw,
   buildLineEnemies,
+  draftCoins,
+  draftHeath,
 };

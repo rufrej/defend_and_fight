@@ -6,7 +6,6 @@ import {
   crossbow,
   boxCenter,
   arrows,
-  coin,
   bg,
   expl,
   fireball,
@@ -19,6 +18,8 @@ import {
   drawArrow,
   draw,
   buildLineEnemies,
+  draftCoins,
+  draftHeath,
 } from "./helpers.js";
 
 import { playSoundShot, playSoundHurt, playSoundDamage } from "./sounds.js";
@@ -34,7 +35,7 @@ let angle = null;
 
 let coolDown = false;
 
-let rechargeTime = 500;
+let rechargeTime = 100;
 
 let arrowsSpeed = 30;
 
@@ -115,30 +116,6 @@ function game() {
   }
   requestAnimationFrame(game);
 }
-
-// function buildLineEnemies(quantity, gap, enemy) {
-//   let centerCoord = 400;
-//   let indentTop = gap;
-//   let indentButton = gap;
-//   const enem = Object.assign({}, enemy);
-//   enem.y = centerCoord;
-//   enemies.push(enem);
-//   for (let i = 1; i <= quantity - 1; i++) {
-//     const enem = Object.assign({}, enemy);
-
-//     if (i % 2 == 0) {
-//       enem.y = centerCoord + indentTop;
-
-//       indentTop += gap;
-//     } else {
-//       enem.y = centerCoord - indentButton;
-//       indentButton -= -gap;
-//     }
-
-//     enemies.push(enem);
-//     enemies.sort((next, prev) => next.y - prev.y);
-//   }
-// }
 
 function update() {
   gameFrame++;
@@ -281,30 +258,12 @@ function update() {
     }
   }
 }
-function draftHeath() {
-  context.strokeStyle = "white";
-  context.lineWidth = 2;
-  context.strokeRect(20, 740, 122, 30);
-  context.fillStyle = "red";
-  context.fillRect(21, 741, towerHealthStrip, 28);
-
-  context.font = "25px Comic Sans MS";
-  context.fillStyle = "white";
-  context.fillText(towerHealth, 60, 765);
-}
-
-function draftCoins() {
-  context.drawImage(coin, 1250, 725, 50, 50);
-  context.font = "30px Comic Sans MS";
-  context.fillStyle = "gold";
-  context.fillText(coins, 1300, 760);
-}
 
 function render() {
   context.drawImage(bg, 0, 0, 1400, 800);
 
-  draftHeath();
-  draftCoins();
+  draftHeath(towerHealth, towerHealthStrip);
+  draftCoins(coins);
 
   for (let i in enemies) {
     enemies[i].type.render(
