@@ -18,7 +18,7 @@ import { Enemies } from "./models.js";
 //   animDeadFrame,  количество кадров
 //   deadSpriteWidth  , ширина кадра анимации смерти,нужна т.к. у некоторых спрайтов она существенно отличаеться от изначальной
 
-const greenGoblin = new Enemies(
+const greenGoblinSprite = new Enemies(
   context,
   "assets/enemies/gob.avif",
   1360, //   indentLeft
@@ -35,7 +35,7 @@ const greenGoblin = new Enemies(
   192 //   deadSpriteWidth
 );
 
-const redDemon = new Enemies(
+const redDemonSprite = new Enemies(
   context,
   "assets/enemies/redDemon.avif",
   1358, //   indentLeft
@@ -52,7 +52,7 @@ const redDemon = new Enemies(
   213 //   deadSpriteWidth
 );
 
-const smallDemon = new Enemies(
+const smallDemonSprite = new Enemies(
   context,
   "assets/enemies/smallDemon.avif",
   1358, //   indentLeft
@@ -66,9 +66,9 @@ const smallDemon = new Enemies(
   11, //   animHitStaggerFrame
   940, //   animDeadIndent
   5, //   animDeadFrame,
-  192 //   deadSpriteWidth
+  190 //   deadSpriteWidth
 );
-const flyDemon = new Enemies(
+const flyDemonSprite = new Enemies(
   context,
   "assets/enemies/flyDemon.avif",
   1358, //   indentLeft
@@ -85,25 +85,84 @@ const flyDemon = new Enemies(
   192 //   deadSpriteWidth
 );
 
-const redDemonParameters = {
-  type: redDemon,
+const minotaurWhiteSprite = new Enemies(
+  context,
+  "assets/enemies/minotaurWhite.avif",
+  1390, //   indentLeft
+  192, //   spriteSize
+  130, //   size
+  6, //   staggerFrames
+  250, //   animRunIndent
+  7, //   animRunFrame
+  490, //   animHitIndent
+  3, //   animHitFrame
+  16, //   animHitStaggerFrame
+  900, //   animDeadIndent
+  5, //   animDeadFrame,
+  230 //   deadSpriteWidth
+);
+const minotaurDarkSprite = new Enemies(
+  context,
+  "assets/enemies/minotaurDark.avif",
+  1370, //   indentLeft
+  192, //   spriteSize
+  130, //   size
+  6, //   staggerFrames
+  250, //   animRunIndent
+  7, //   animRunFrame
+  490, //   animHitIndent
+  3, //   animHitFrame
+  16, //   animHitStaggerFrame
+  900, //   animDeadIndent
+  5, //   animDeadFrame,
+  230 //   deadSpriteWidth
+);
+
+const redDemon = {
+  sprite: redDemonSprite,
   x: 1300,
   y: 200,
   health: 400,
-  healthStrip: 50,
+  healthStrip: 60,
   animation: "run",
   deleteFlag: 0,
-  damage: 5,
+  damage: 10,
   speed: 1.3,
   size: 60,
   award: 5,
 };
-const smallDemonParameters = {
-  type: smallDemon,
+const minotaurWhite = {
+  sprite: minotaurWhiteSprite,
+  x: 1300,
+  y: 200,
+  health: 600,
+  healthStrip: 65,
+  animation: "run",
+  deleteFlag: 0,
+  damage: 12,
+  speed: 1.5,
+  size: 60,
+  award: 6,
+};
+const minotaurDark = {
+  sprite: minotaurDarkSprite,
+  x: 1300,
+  y: 200,
+  health: 1000,
+  healthStrip: 70,
+  animation: "run",
+  deleteFlag: 0,
+  damage: 15,
+  speed: 1.5,
+  size: 60,
+  award: 8,
+};
+const smallDemon = {
+  sprite: smallDemonSprite,
   x: 1300,
   y: 200,
   health: 200,
-  healthStrip: 40,
+  healthStrip: 59,
   animation: "run",
   deleteFlag: 0,
   damage: 5,
@@ -113,11 +172,11 @@ const smallDemonParameters = {
   firstFrame: 0,
 };
 
-const greenGoblinParameters = {
-  type: greenGoblin,
+const greenGoblin = {
+  sprite: greenGoblinSprite,
   x: 1300,
   y: 200,
-  healthStrip: 40,
+  healthStrip: 50,
   health: 100,
   animation: "run",
   deleteFlag: 0,
@@ -126,11 +185,11 @@ const greenGoblinParameters = {
   size: 50,
   award: 1,
 };
-const flyDemonParameters = {
-  type: flyDemon,
+const flyDemon = {
+  sprite: flyDemonSprite,
   x: 1300,
   y: 200,
-  healthStrip: 40,
+  healthStrip: 50,
   health: 100,
   animation: "run",
   deleteFlag: 0,
@@ -145,8 +204,13 @@ export {
   flyDemon,
   smallDemon,
   greenGoblin,
-  redDemonParameters,
-  flyDemonParameters,
-  smallDemonParameters,
-  greenGoblinParameters,
+  minotaurWhite,
+  minotaurDark,
+  //
+  redDemonSprite,
+  flyDemonSprite,
+  smallDemonSprite,
+  greenGoblinSprite,
+  minotaurWhiteSprite,
+  minotaurDarkSprite,
 };

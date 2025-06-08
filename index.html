@@ -10,9 +10,55 @@
   </head>
   <body>
     <div class="container">
-      <canvas id="game"> </canvas>
+      <dialog id="menu" class="menu">
+        <div class="shop display-none" id="shop">
+          <div class="shop-item">
+            <p id="damageIndicator"></p>
+            <p id="damageIndicatorNextLevel"></p>
+            <button type="button" class="button-shop" id="buttonShopDamage">
+              damage +
+            </button>
+          </div>
+          <div class="shop-item">
+            <p id="rateIndicator"></p>
+            <p id="rateIndicatorNextLevel"></p>
+            <button type="button" class="button-shop" id="buttonShopRate">
+              rate of fire +
+            </button>
+          </div>
+          <div class="shop-item">
+            <p id="healthIndicator"></p>
+            <p id="healthIndicatorNextLevel"></p>
+            <button
+              type="button"
+              class="button-shop"
+              id="buttonShopTowerHealth"
+            >
+              tower Health +
+            </button>
+          </div>
+        </div>
+        <button type="button" id="buttonGameShop" class="button-open_shop">
+          <img src="/assets/forge.avif" alt="" />
+        </button>
+        <button type="button" id="buttonGameStart" class="button-start">
+          <img src="./assets/icons/shot.svg" alt="START" />
+        </button>
+      </dialog>
+      <dialog id="gameOver" class="game-over">
+        <h1>DEFEAT</h1>
+
+        <div class="game-over__img-wrapper"></div>
+
+        <h2 id="game-over__kill-counter"></h2>
+        <h2 id="game-over__award-counter"></h2>
+        <button type="button" id="buttonMenu">menu</button>
+      </dialog>
+
+      <canvas id="game"></canvas>
       <img class="crossbow" src="assets/crossbow/с5.png" alt="" />
       <button id="buttonPause" class="button-pause" type="button">| |</button>
+      <button id="buttonVolley" class="button-volley" type="button"></button>
     </div>
   </body>
 </html>
