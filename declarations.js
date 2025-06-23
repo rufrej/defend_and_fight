@@ -8,25 +8,25 @@ const buttonPause = document.querySelector("#buttonPause");
 const buttonGameStart = document.querySelector("#buttonGameStart");
 const buttonMenu = document.querySelector("#buttonMenu");
 const buttonShop = document.querySelector("#buttonGameShop");
+const buttonUpDamage = document.querySelector("#buttonShopDamage");
+const buttonUpRecharge = document.querySelector("#buttonShopRecharge");
+const buttonUpHealth = document.querySelector("#buttonShopTowerHealth");
+const buttonUpVolley = document.querySelector("#buttonShopVolley");
+const buttonUpVolleyWave = document.querySelector("#buttonShopVolleyWave");
+
 const shop = document.querySelector("#shop");
 const buttonVolley = document.querySelector("#buttonVolley");
 const killCounter = document.querySelector("#game-over__kill-counter");
 const awardCounter = document.querySelector("#game-over__award-counter");
 
+const coinsIndicator = document.querySelector("#coinsIndicator");
 const damageIndicator = document.querySelector("#damageIndicator");
-const damageIndicatorNextLevel = document.querySelector(
-  "#damageIndicatorNextLevel"
-);
 
-const rateIndicator = document.querySelector("#rateIndicator");
-const rateIndicatorNextLevel = document.querySelector(
-  "#rateIndicatorNextLevel"
-);
+const rechargeIndicator = document.querySelector("#rechargeIndicator");
 
 const healthIndicator = document.querySelector("#healthIndicator");
-const healthIndicatorNextLevel = document.querySelector(
-  "#healthIndicatorNextLevel"
-);
+const volleyIndicator = document.querySelector("#volleyIndicator");
+const volleyWaveIndicator = document.querySelector("#volleyWaveIndicator");
 
 const modalGameOver = document.querySelector("#gameOver");
 const modalMenu = document.querySelector("#menu");
@@ -85,10 +85,15 @@ export {
   buttonVolley,
   arrow,
   volley,
+  coinsIndicator,
   damageIndicator,
-  damageIndicatorNextLevel,
-  rateIndicator,
-  rateIndicatorNextLevel,
+  rechargeIndicator,
   healthIndicator,
-  healthIndicatorNextLevel,
+  buttonUpDamage,
+  buttonUpRecharge,
+  buttonUpHealth,
+  buttonUpVolley,
+  buttonUpVolleyWave,
+  volleyIndicator,
+  volleyWaveIndicator,
 };

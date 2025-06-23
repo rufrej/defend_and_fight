@@ -16,6 +16,7 @@ body {
 
 button {
   font-family: "raster";
+  user-select: none;
 }
 #game {
   background: url(assets/fort.avif) 0% 0% /100% 100%;
@@ -135,7 +136,7 @@ button {
 
 .shop {
   width: 50%;
-  height: 50%;
+  height: 60%;
   /* background-color: blanchedalmond; */
   background-repeat: no-repeat;
   background-image: url(/assets/smithy.gif);
@@ -144,29 +145,55 @@ button {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  padding: 0 3%;
+  padding: 1% 3%;
   position: absolute;
   top: 50%;
   left: 40%;
   transform: translate(-50%, -50%);
 }
+
+.button-cheat {
+  position: absolute;
+  bottom: 7%;
+}
+
+.coins-indicator {
+  display: flex;
+  margin-right: auto;
+  width: 8%;
+  height: 8%;
+  color: gold;
+  font-family: "raster";
+}
 .shop-item {
   width: 100%;
   display: flex;
-
+  align-items: center;
+  justify-content: end;
   p {
     font-family: "raster";
     background-color: antiquewhite;
 
     margin: auto;
     padding: 1%;
-    border-radius: 10%;
+    border-radius: 4px;
   }
+}
+
+.damage-hint {
+  color: #fff;
+}
+.damage-hint:hover::before {
+  content: "It also increases the arrow's speed.";
+  text-wrap: nowrap;
+  font-size: 20px;
+  position: absolute;
+  top: -5%;
 }
 
 .button-shop {
   margin: 1%;
-  padding: 2%;
+  padding: 1%;
   font-size: 120%;
   border-radius: 10px;
   background-color: darkorange;
@@ -204,6 +231,13 @@ button {
 
 .display-none {
   display: none;
+}
+
+.colored-red {
+  color: red;
+}
+.colored-gold {
+  color: gold;
 }
 
 @keyframes appearance {

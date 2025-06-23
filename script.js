@@ -21,12 +21,11 @@ import {
   distanceAttacks,
   buttonShop,
   shop,
-  damageIndicator,
-  damageIndicatorNextLevel,
-  rateIndicator,
-  rateIndicatorNextLevel,
-  healthIndicator,
-  healthIndicatorNextLevel,
+  buttonUpDamage,
+  buttonUpRecharge,
+  buttonUpHealth,
+  buttonUpVolley,
+  buttonUpVolleyWave,
 } from "./declarations.js";
 
 import {
@@ -35,8 +34,7 @@ import {
   degreesToRadians,
   setCoins,
   getCoins,
-  pointingVolley,
-  togglePointingVolley,
+  getData,
 } from "./helpers.js";
 
 import {
@@ -45,6 +43,7 @@ import {
   drawCoins,
   drawHeath,
   drawPointingVolley,
+  drawButtonVolley,
 } from "/drawing.js";
 
 import {
@@ -63,30 +62,36 @@ import {
   minotaurDarkSprite,
 } from "./enemies.js";
 
-import { pushArrowLine, vaveEnemies, volleyArrows } from "./mechanics.js";
+import { vaveEnemies, volleyArrows } from "./mechanics.js";
+
+import {
+  handleClickButtonShop,
+  handleClickButtonUpDamage,
+  handleClickButtonUpHealth,
+  handleClickButtonUpRate,
+  handleClickButtonUpVolley,
+  handleClickButtonUpVolleyWave,
+} from "./handlers.js";
+const data = getData();
+
+let crossbowDamage = data.damage;
+let towerHealth = data.towerHealth;
 
 let angle;
 let coolDown = false;
-let rechargeTime = 130;
-let arrowsSpeed = 30;
+
+// let arrowsSpeed = ;
 let gameFrame = 0;
-let towerHealth = 110;
+
 let towerHealthStrip = 120;
-let crossbowDamage = 50;
+
 let volleyDamage = 100;
 let coins = getCoins();
 let levelAward = 0;
 let levelKills = 0;
 let pageX;
 
-// const battleSound = new Audio(`assets/sounds/background/battle2.mp3`);
-
-// function playSoundBattle() {
-//   setTimeout(() => {
-//     battleSound.play();
-//     battleSound.loop = true;
-//   }, 100);
-// }
+drawButtonVolley(data);
 
 function showModalGameOver() {
   killCounter.innerHTML = `ENEMIES KILLED : ${levelKills}`;
@@ -97,6 +102,7 @@ function showModalGameOver() {
   enemies.splice(0, enemies.length);
   distanceAttacks.splice(0, enemies.length);
   deadEnemies.splice(0, enemies.length);
+  volley.splice(0, volley.length);
   // setTimeout(() => {
   //   playSoundGameOver("play");
   // }, 500);
@@ -106,7 +112,7 @@ function showModalMenu() {
   if (animation) {
     toggleAnimation();
   }
-  towerHealth = 110;
+  towerHealth = data.towerHealth;
   towerHealthStrip = 120;
   modalMenu.showModal();
 }
@@ -125,14 +131,14 @@ window.addEventListener("keydown", function (e) {
 });
 
 buttonVolley.addEventListener("click", volleyArrows);
-
 buttonPause.addEventListener("click", toggleAnimation);
+buttonShop.addEventListener("click", handleClickButtonShop);
+buttonUpDamage.addEventListener("click", handleClickButtonUpDamage);
+buttonUpRecharge.addEventListener("click", handleClickButtonUpRate);
+buttonUpHealth.addEventListener("click", handleClickButtonUpHealth);
+buttonUpVolley.addEventListener("click", handleClickButtonUpVolley);
 
-buttonShop.addEventListener("click", () => {
-  damageIndicator.textContent = crossbowDamage;
-
-  shop.classList.toggle("display-none");
-});
+buttonUpVolleyWave.addEventListener("click", handleClickButtonUpVolleyWave);
 
 buttonMenu.addEventListener("click", () => {
   // playSoundGameOver("stop");
@@ -142,12 +148,14 @@ buttonMenu.addEventListener("click", () => {
 
 buttonGameStart.addEventListener("click", () => {
   modalMenu.close();
+  if (!shop.classList.contains("display-none")) {
+    shop.classList.toggle("display-none");
+  }
   if (!animation) {
     toggleAnimation();
     levelAward = 0;
     levelKills = 0;
   }
-
   // playSoundBattle();
   gameFrame = 0;
 });
@@ -176,30 +184,18 @@ function shot() {
           arrows.push({
             x: 80,
             y: 390,
-            speed: arrowsSpeed,
+            speed: data.arrowSpeed,
             direction: angle - 90,
           });
-          arrows.push({
-            x: 80,
-            y: 390,
-            speed: arrowsSpeed,
-            direction: angle - 91,
-          });
-          arrows.push({
-            x: 80,
-            y: 390,
-            speed: arrowsSpeed,
-            direction: angle - 89,
-          });
 
-          crossbow.style.animation = `reloaded 0.${rechargeTime}s linear infinite`;
+          crossbow.style.animation = `reloaded 0.${data.rechargeTime}s linear infinite`;
           coolDown = true;
           setTimeout(() => {
             coolDown = false;
             crossbow.style.animation = ``;
-          }, rechargeTime);
+          }, data.rechargeTime);
 
-          timerId = setTimeout(tick, rechargeTime);
+          timerId = setTimeout(tick, data.rechargeTime);
         }
       }, 20);
 
@@ -271,7 +267,6 @@ function update() {
       // enemies.splice(item, 1); //  удаление
 
       // анимация атаки
-
       if (gameFrame % 50 == 0) {
         towerHealth = towerHealth - enemies[item].damage;
         let damage = towerHealth / enemies[item].damage;
@@ -310,12 +305,12 @@ function update() {
       ) {
         arrows.splice(j, 1);
         playSoundHurt();
+        let damage = crossbowDamage / enemies[item].health;
         enemies[item].health -= crossbowDamage;
-        let damage = enemies[item].health / crossbowDamage;
-        enemies[item].healthStrip -= enemies[item].healthStrip / damage;
+        enemies[item].healthStrip =
+          enemies[item].healthStrip - enemies[item].healthStrip * damage;
 
         if (enemies[item].health <= 0) enemies[item].deleteFlag = 1;
-
         break;
       }
     }
@@ -391,8 +386,10 @@ function update() {
 function render() {
   context.drawImage(bg, 0, 0, 1400, 800);
 
-  drawHeath(towerHealth, towerHealthStrip);
-  drawCoins(coins);
+  if (animation) {
+    drawHeath(towerHealth, towerHealthStrip);
+    drawCoins();
+  }
 
   drawPointingVolley(context, pageX); // отрисовка зоны для залпа стрел
   for (let i in enemies) {

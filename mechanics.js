@@ -1,6 +1,11 @@
 import { playSoundArrowLaunch, playSoundArrowHit } from "./sounds.js";
 import { canvas, volley, enemies, buttonVolley } from "./declarations.js";
-import { animation, pointingVolley, togglePointingVolley } from "./helpers.js";
+import {
+  animation,
+  getData,
+  pointingVolley,
+  togglePointingVolley,
+} from "./helpers.js";
 
 import {
   redDemon,
@@ -40,9 +45,17 @@ function pushArrowLine(event, delay) {
 function pushArrow(event) {
   if (!volleyArrowsCoolDown) {
     if (animation) {
-      pushArrowLine(event, 500);
-      pushArrowLine(event, 700);
-      pushArrowLine(event, 1000);
+      let data = getData();
+      const vaves = data.volleyArrowsWave;
+      let delay = 500;
+
+      for (let i = 1; i <= vaves; i++) {
+        pushArrowLine(event, delay);
+        delay += 200;
+      }
+      // pushArrowLine(event, 500);
+      // pushArrowLine(event, 700);
+      // pushArrowLine(event, 1000);
 
       canvas.removeEventListener("click", pushArrow);
       togglePointingVolley();
@@ -77,7 +90,10 @@ function pushArrow(event) {
 }
 
 function volleyArrows() {
-  if (!volleyArrowsCoolDown) {
+  let data = getData();
+  let volleyArrowsLvl = data.volleyArrowsLvl;
+  console.log(volleyArrowsLvl);
+  if (!volleyArrowsCoolDown && volleyArrowsLvl !== 0) {
     if (!pointingVolley) togglePointingVolley();
     canvas.addEventListener("click", pushArrow);
   }

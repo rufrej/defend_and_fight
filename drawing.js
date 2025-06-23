@@ -1,5 +1,5 @@
-import { context, coin } from "./declarations.js";
-import { pointingVolley } from "./helpers.js";
+import { context, coin, buttonVolley } from "./declarations.js";
+import { getCoins, pointingVolley } from "./helpers.js";
 function draw(
   context,
   image,
@@ -58,11 +58,11 @@ function drawHeath(towerHealth, towerHealthStrip) {
   context.fillText(towerHealth, 60, 765);
 }
 
-function drawCoins(coins) {
+function drawCoins() {
   context.drawImage(coin, 1250, 725, 50, 50);
   context.font = "30px Comic Sans MS";
   context.fillStyle = "gold";
-  context.fillText(coins, 1300, 760);
+  context.fillText(getCoins(), 1300, 760);
 }
 
 function drawPointingVolley(context, pageX) {
@@ -79,4 +79,16 @@ function drawPointingVolley(context, pageX) {
   }
 }
 
-export { draw, drawArrow, drawCoins, drawHeath, drawPointingVolley };
+function drawButtonVolley(data) {
+  if (data.volleyArrowsLvl > 0) {
+    buttonVolley.classList.remove("display-none");
+  }
+}
+export {
+  draw,
+  drawArrow,
+  drawCoins,
+  drawHeath,
+  drawPointingVolley,
+  drawButtonVolley,
+};

@@ -12,29 +12,49 @@
     <div class="container">
       <dialog id="menu" class="menu">
         <div class="shop display-none" id="shop">
+          <div class="coins-indicator">
+            <img src="/assets/coin.avif" alt="" />
+            <h1 id="coinsIndicator"></h1>
+          </div>
           <div class="shop-item">
             <p id="damageIndicator"></p>
-            <p id="damageIndicatorNextLevel"></p>
             <button type="button" class="button-shop" id="buttonShopDamage">
               damage +
             </button>
+            <span class="damage-hint">(!)</span>
           </div>
           <div class="shop-item">
-            <p id="rateIndicator"></p>
-            <p id="rateIndicatorNextLevel"></p>
-            <button type="button" class="button-shop" id="buttonShopRate">
+            <p id="rechargeIndicator"></p>
+            <button type="button" class="button-shop" id="buttonShopRecharge">
               rate of fire +
             </button>
           </div>
           <div class="shop-item">
             <p id="healthIndicator"></p>
-            <p id="healthIndicatorNextLevel"></p>
             <button
               type="button"
               class="button-shop"
               id="buttonShopTowerHealth"
             >
               tower Health +
+            </button>
+          </div>
+          <div class="shop-item">
+            <p id="volleyIndicator"></p>
+            <button type="button" class="button-shop" id="buttonShopVolley">
+              volley arrows
+            </button>
+            <!-- <button type="button" class="button-shop" id="buttonShopVolleyWave">
+              wave
+            </button> -->
+          </div>
+          <div class="shop-item">
+            <p id="volleyWaveIndicator"></p>
+            <!-- <button type="button" class="button-shop" id="buttonShopVolley">
+              volley arrows
+            </button> -->
+            <button type="button" class="button-shop" id="buttonShopVolleyWave">
+              wave
             </button>
           </div>
         </div>
@@ -58,7 +78,11 @@
       <canvas id="game"></canvas>
       <img class="crossbow" src="assets/crossbow/с5.png" alt="" />
       <button id="buttonPause" class="button-pause" type="button">| |</button>
-      <button id="buttonVolley" class="button-volley" type="button"></button>
+      <button
+        id="buttonVolley"
+        class="button-volley display-none"
+        type="button"
+      ></button>
     </div>
   </body>
 </html>

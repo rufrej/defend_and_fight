@@ -2,6 +2,14 @@ function playSoundShot() {
   const shot = new Audio("assets/sounds/shot.mp3");
   shot.play();
 }
+function playSoundButtonClick() {
+  const select = new Audio("assets/sounds/select.mp3");
+  select.play();
+}
+function playSoundNotCompleted() {
+  const sound = new Audio("assets/sounds/noselect.mp3");
+  sound.play();
+}
 function playSoundHurt() {
   let randomSound = Math.floor(Math.random() * 3 + 1);
   const hurtSound = new Audio(`assets/sounds/hurt/hit${randomSound}.wav`);
@@ -41,5 +49,7 @@ export {
   playSoundGameOver,
   playSoundArrowLaunch,
   playSoundArrowHit,
+  playSoundButtonClick,
+  playSoundNotCompleted,
   // playSoundBattle,
 };

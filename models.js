@@ -58,9 +58,9 @@ export function Enemies(
     );
     this.context.lineWidth = 1;
     this.context.strokeStyle = "white";
-    this.context.strokeRect(x + 30, y - 2, healthStrip, 8); //healthStrip + 10  это кастыль для предотвращения движения полоски здоровья в обратную сторону, почему оно вообще происходит пока не понятно
+    this.context.strokeRect(x + 30, y - 2, healthStrip + 10, 8); //healthStrip + 10  это кастыль для предотвращения движения полоски здоровья в обратную сторону, почему оно вообще происходит пока не понятно
     this.context.fillStyle = "red";
-    this.context.fillRect(x + 31, y - 1, healthStrip - 2, 6);
+    this.context.fillRect(x + 31, y - 1, healthStrip + 10 - 2, 6);
   };
 
   this.dead = function (x, y, frame) {
