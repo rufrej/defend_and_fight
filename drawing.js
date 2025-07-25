@@ -59,10 +59,11 @@ function drawHeath(towerHealth, towerHealthStrip) {
 }
 
 function drawCoins() {
+  let coins = getCoins();
   context.drawImage(coin, 1250, 725, 50, 50);
   context.font = "30px Comic Sans MS";
   context.fillStyle = "gold";
-  context.fillText(getCoins(), 1300, 760);
+  context.fillText(coins, 1300, 760);
 }
 
 function drawPointingVolley(context, pageX) {

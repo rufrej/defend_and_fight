@@ -10,16 +10,28 @@ import {
   buttonUpVolleyWave,
   volleyIndicator,
   volleyWaveIndicator,
+  multishotIndicator,
+  buttonUpMultishot,
+  arrows,
 } from "./declarations.js";
 
 let animation = false;
 let pointingVolley = false;
+
+let volleyArrowsCoolDown = false;
 
 function toggleAnimation() {
   if (!animation) {
     animation = true;
   } else if (animation) {
     animation = false;
+  }
+}
+function toggleVolleyArrowsCooldown() {
+  if (!volleyArrowsCoolDown) {
+    volleyArrowsCoolDown = true;
+  } else if (volleyArrowsCoolDown) {
+    volleyArrowsCoolDown = false;
   }
 }
 
@@ -63,6 +75,7 @@ function getData() {
       volleyArrowsLvl: 0,
       volleyArrowsDamage: 100,
       volleyArrowsWave: 1,
+      multishotLvl: 1,
     }
   );
 }
@@ -85,10 +98,10 @@ function updateShopData() {
   let damageNextLvl = data.damage + data.damage / 10;
   let rechargeNextLvl = data.rechargeTime - data.rechargeTime / 20;
   let towerHealthNextLvl = data.towerHealth + 10;
-
+  let multishotLvl = data.multishotLvl;
+  let multishotNextLvl = multishotLvl + 1;
   let volleyArrowsNextLvl =
     data.volleyArrowsDamage + data.volleyArrowsDamage / 10;
-
   let volleyArrowsWaveNextLvl = data.volleyArrowsWave * 3000;
 
   damageIndicator.innerHTML = `damage lvl ${damageLvl} : <span class="colored-red">${Math.round(
@@ -114,7 +127,19 @@ function updateShopData() {
   buttonUpHealth.innerHTML = `up health  <span class ="colored-gold">${
     towerHealthLvl * 200
   }</span>`;
+  //
 
+  if (multishotLvl < 5) {
+    multishotIndicator.innerHTML = `multishot lvl ${multishotLvl} : <span class="colored-red">${multishotLvl}</span>
+    --> <span class="colored-red">${multishotNextLvl}</span>`;
+    buttonUpMultishot.innerHTML = `up multishot <span class ="colored-gold">${
+      multishotLvl * 10000
+    }</span>`;
+  } else if (multishotLvl == 5) {
+    multishotIndicator.innerHTML = `multishot lvl : ${multishotLvl}  <span class="colored-red">max</span>`;
+    buttonUpMultishot.innerHTML = `max`;
+  }
+  //
   if (volleyArrowsLvl == 0) {
     buttonUpVolleyWave.classList.add("display-none");
     volleyWaveIndicator.classList.add("display-none");
@@ -136,6 +161,124 @@ function updateShopData() {
      --> <span class="colored-red">${++volleyArrowsWave}</span> `;
   }
 }
+function getArrowsForShot(multishot, angle) {
+  const data = getData();
+  switch (multishot) {
+    case 1:
+      arrows.push({
+        x: 80,
+        y: 390,
+        speed: data.arrowSpeed,
+        direction: angle - 90,
+      });
+
+      break;
+    case 2:
+      arrows.push({
+        x: 80,
+        y: 390,
+        speed: data.arrowSpeed,
+        direction: angle - 91,
+      });
+      arrows.push({
+        x: 80,
+        y: 390,
+        speed: data.arrowSpeed,
+        direction: angle - 89,
+      });
+
+      break;
+    case 3:
+      arrows.push({
+        x: 80,
+        y: 390,
+        speed: data.arrowSpeed,
+        direction: angle - 90,
+      });
+      arrows.push({
+        x: 80,
+        y: 390,
+        speed: data.arrowSpeed,
+        direction: angle - 89,
+      });
+      arrows.push({
+        x: 80,
+        y: 390,
+        speed: data.arrowSpeed,
+        direction: angle - 91,
+      });
+
+      break;
+    case 4:
+      arrows.push({
+        x: 80,
+        y: 390,
+        speed: data.arrowSpeed,
+        direction: angle - 91.5,
+      });
+      arrows.push({
+        x: 80,
+        y: 390,
+        speed: data.arrowSpeed,
+        direction: angle - 88.5,
+      });
+      arrows.push({
+        x: 80,
+        y: 390,
+        speed: data.arrowSpeed,
+        direction: angle - 89.5,
+      });
+      arrows.push({
+        x: 80,
+        y: 390,
+        speed: data.arrowSpeed,
+        direction: angle - 90.5,
+      });
+
+      break;
+    case 5:
+      arrows.push({
+        x: 80,
+        y: 390,
+        speed: data.arrowSpeed,
+        direction: angle - 90,
+      });
+      arrows.push({
+        x: 80,
+        y: 390,
+        speed: data.arrowSpeed,
+        direction: angle - 89,
+      });
+      arrows.push({
+        x: 80,
+        y: 390,
+        speed: data.arrowSpeed,
+        direction: angle - 91,
+      });
+      arrows.push({
+        x: 80,
+        y: 390,
+        speed: data.arrowSpeed,
+        direction: angle - 92,
+      });
+      arrows.push({
+        x: 80,
+        y: 390,
+        speed: data.arrowSpeed,
+        direction: angle - 88,
+      });
+
+      break;
+
+    default:
+      arrows.push({
+        x: 80,
+        y: 390,
+        speed: data.arrowSpeed,
+        direction: angle - 90,
+      });
+  }
+}
 
 export {
   animation,
@@ -148,4 +291,7 @@ export {
   setData,
   getData,
   updateShopData,
+  getArrowsForShot,
+  volleyArrowsCoolDown,
+  toggleVolleyArrowsCooldown,
 };

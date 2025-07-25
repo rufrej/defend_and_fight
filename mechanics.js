@@ -5,6 +5,8 @@ import {
   getData,
   pointingVolley,
   togglePointingVolley,
+  toggleVolleyArrowsCooldown,
+  volleyArrowsCoolDown,
 } from "./helpers.js";
 
 import {
@@ -16,7 +18,7 @@ import {
   minotaurDark,
 } from "./enemies.js";
 
-let volleyArrowsCoolDown = false;
+// let volleyArrowsCoolDown = false;
 let volleyArrowsCoolDownTime = 9000;
 
 function pushArrowLine(event, delay) {
@@ -53,15 +55,11 @@ function pushArrow(event) {
         pushArrowLine(event, delay);
         delay += 200;
       }
-      // pushArrowLine(event, 500);
-      // pushArrowLine(event, 700);
-      // pushArrowLine(event, 1000);
-
       canvas.removeEventListener("click", pushArrow);
       togglePointingVolley();
     }
   }
-  volleyArrowsCoolDown = true;
+  if (!volleyArrowsCoolDown) toggleVolleyArrowsCooldown();
 
   buttonVolley.style.background = "rgb(87, 18, 9)";
 
@@ -85,29 +83,43 @@ function pushArrow(event) {
   }, volleyArrowsCoolDownTime);
 
   setTimeout(() => {
-    if (animation) volleyArrowsCoolDown = false;
+    if (animation) {
+      if (volleyArrowsCoolDown) {
+        buttonVolley.textContent = " ";
+        toggleVolleyArrowsCooldown();
+      }
+    }
   }, volleyArrowsCoolDownTime);
 }
 
 function volleyArrows() {
   let data = getData();
   let volleyArrowsLvl = data.volleyArrowsLvl;
-  console.log(volleyArrowsLvl);
+
   if (!volleyArrowsCoolDown && volleyArrowsLvl !== 0) {
     if (!pointingVolley) togglePointingVolley();
     canvas.addEventListener("click", pushArrow);
   }
 }
 
-function buildLineEnemies(array, quantity, gap, enemy) {
+function buildLineEnemies(array, quantity, gap, enemy, lvl) {
   let centerCoord = 400;
   let indentTop = gap;
   let indentButton = gap;
+
   const enem = Object.assign({}, enemy);
   enem.y = centerCoord;
+  enem.lvl = lvl;
+  enem.damage *= lvl;
+  enem.health *= lvl;
+  enem.award *= lvl;
   array.push(enem);
   for (let i = 1; i <= quantity - 1; i++) {
     const enem = Object.assign({}, enemy);
+    enem.lvl = lvl;
+    enem.damage *= lvl;
+    enem.health *= lvl;
+    enem.award *= lvl;
 
     if (i % 2 == 0) {
       enem.y = centerCoord + indentTop;
@@ -120,30 +132,89 @@ function buildLineEnemies(array, quantity, gap, enemy) {
 
     array.push(enem);
     array.sort((next, prev) => next.y - prev.y);
+    console.log(array);
   }
 }
 
-function vaveEnemies(gameFrame) {
+function wedgeEnemies(gameFrame, lvl) {
+  // спавн врагов клином
   if (gameFrame == 100) {
-    buildLineEnemies(enemies, 6, 80, greenGoblin);
+    buildLineEnemies(enemies, 1, 0, greenGoblin, 1);
+  }
+  if (gameFrame == 120) {
+    buildLineEnemies(enemies, 3, 50, greenGoblin, 1);
+  }
+
+  if (gameFrame == 140) {
+    buildLineEnemies(enemies, 5, 50, greenGoblin, 1);
+  }
+
+  if (gameFrame == 160) {
+    buildLineEnemies(enemies, 7, 50, greenGoblin, 1);
+  }
+  if (gameFrame == 180) {
+    buildLineEnemies(enemies, 9, 50, greenGoblin, 1);
+  }
+  if (gameFrame == 200) {
+    buildLineEnemies(enemies, 11, 50, greenGoblin, 1);
+  }
+}
+
+function vaveEnemies(gameFrame, lvl) {
+  if (gameFrame == 100) {
+    buildLineEnemies(enemies, 6, 80, greenGoblin, lvl);
   }
   if (gameFrame == 300) {
-    buildLineEnemies(enemies, 6, 80, flyDemon);
+    buildLineEnemies(enemies, 6, 80, flyDemon, lvl);
   }
 
   if (gameFrame == 500) {
-    buildLineEnemies(enemies, 6, 80, smallDemon);
+    buildLineEnemies(enemies, 6, 80, smallDemon, lvl);
   }
 
   if (gameFrame == 700) {
-    buildLineEnemies(enemies, 6, 80, redDemon);
+    buildLineEnemies(enemies, 6, 80, redDemon, lvl);
   }
   if (gameFrame == 900) {
-    buildLineEnemies(enemies, 5, 100, minotaurWhite);
+    buildLineEnemies(enemies, 5, 100, minotaurWhite, lvl);
   }
   if (gameFrame == 1100) {
-    buildLineEnemies(enemies, 4, 120, minotaurDark);
+    buildLineEnemies(enemies, 4, 120, minotaurDark, lvl);
   }
 }
 
-export { pushArrowLine, vaveEnemies, volleyArrows };
+function infiniteVave(gameFrame, towerHealth) {
+  let lvl = 1;
+
+  while (towerHealth > 0) {
+    if (gameFrame == 100) {
+      buildLineEnemies(enemies, 6, 80, greenGoblin, lvl);
+    }
+    if (gameFrame == 300) {
+      buildLineEnemies(enemies, 6, 80, flyDemon, lvl);
+    }
+
+    if (gameFrame == 500) {
+      buildLineEnemies(enemies, 6, 80, smallDemon, lvl);
+    }
+
+    if (gameFrame == 700) {
+      buildLineEnemies(enemies, 6, 80, redDemon, lvl);
+    }
+    if (gameFrame == 900) {
+      buildLineEnemies(enemies, 5, 100, minotaurWhite, lvl);
+    }
+    if (gameFrame == 1100) {
+      buildLineEnemies(enemies, 4, 120, minotaurDark, lvl);
+    }
+    lvl++;
+  }
+}
+
+export {
+  pushArrowLine,
+  vaveEnemies,
+  volleyArrows,
+  infiniteVave,
+  volleyArrowsCoolDown,
+};

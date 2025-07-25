@@ -129,7 +129,7 @@ const redDemon = {
   damage: 10,
   speed: 1.3,
   size: 60,
-  award: 5,
+  award: 7,
 };
 const minotaurWhite = {
   sprite: minotaurWhiteSprite,
@@ -142,7 +142,7 @@ const minotaurWhite = {
   damage: 12,
   speed: 1.5,
   size: 60,
-  award: 6,
+  award: 8,
 };
 const minotaurDark = {
   sprite: minotaurDarkSprite,
@@ -155,7 +155,7 @@ const minotaurDark = {
   damage: 15,
   speed: 1.5,
   size: 60,
-  award: 8,
+  award: 10,
 };
 const smallDemon = {
   sprite: smallDemonSprite,
@@ -168,7 +168,7 @@ const smallDemon = {
   damage: 5,
   speed: 2,
   size: 50,
-  award: 2,
+  award: 3,
   firstFrame: 0,
 };
 
@@ -182,8 +182,8 @@ const greenGoblin = {
   deleteFlag: 0,
   damage: 5,
   speed: 3,
-  size: 50,
-  award: 1,
+  size: 60,
+  award: 2,
 };
 const flyDemon = {
   sprite: flyDemonSprite,
@@ -195,7 +195,7 @@ const flyDemon = {
   deleteFlag: 0,
   damage: 10,
   speed: 2,
-  size: 50,
+  size: 70,
   award: 3,
 };
 

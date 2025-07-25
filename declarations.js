@@ -13,6 +13,7 @@ const buttonUpRecharge = document.querySelector("#buttonShopRecharge");
 const buttonUpHealth = document.querySelector("#buttonShopTowerHealth");
 const buttonUpVolley = document.querySelector("#buttonShopVolley");
 const buttonUpVolleyWave = document.querySelector("#buttonShopVolleyWave");
+const buttonUpMultishot = document.querySelector("#buttonShopMultishot");
 
 const shop = document.querySelector("#shop");
 const buttonVolley = document.querySelector("#buttonVolley");
@@ -27,6 +28,7 @@ const rechargeIndicator = document.querySelector("#rechargeIndicator");
 const healthIndicator = document.querySelector("#healthIndicator");
 const volleyIndicator = document.querySelector("#volleyIndicator");
 const volleyWaveIndicator = document.querySelector("#volleyWaveIndicator");
+const multishotIndicator = document.querySelector("#multishotIndicator");
 
 const modalGameOver = document.querySelector("#gameOver");
 const modalMenu = document.querySelector("#menu");
@@ -96,4 +98,6 @@ export {
   buttonUpVolleyWave,
   volleyIndicator,
   volleyWaveIndicator,
+  multishotIndicator,
+  buttonUpMultishot,
 };

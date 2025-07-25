@@ -26,6 +26,8 @@ import {
   buttonUpHealth,
   buttonUpVolley,
   buttonUpVolleyWave,
+  multishotIndicator,
+  buttonUpMultishot,
 } from "./declarations.js";
 
 import {
@@ -35,6 +37,8 @@ import {
   setCoins,
   getCoins,
   getData,
+  getArrowsForShot,
+  toggleVolleyArrowsCooldown,
 } from "./helpers.js";
 
 import {
@@ -62,12 +66,18 @@ import {
   minotaurDarkSprite,
 } from "./enemies.js";
 
-import { vaveEnemies, volleyArrows } from "./mechanics.js";
+import {
+  infiniteVave,
+  vaveEnemies,
+  volleyArrows,
+  volleyArrowsCoolDown,
+} from "./mechanics.js";
 
 import {
   handleClickButtonShop,
   handleClickButtonUpDamage,
   handleClickButtonUpHealth,
+  handleClickButtonUpMultishot,
   handleClickButtonUpRate,
   handleClickButtonUpVolley,
   handleClickButtonUpVolleyWave,
@@ -76,7 +86,7 @@ const data = getData();
 
 let crossbowDamage = data.damage;
 let towerHealth = data.towerHealth;
-
+let multishot = data.multishotLvl;
 let angle;
 let coolDown = false;
 
@@ -114,6 +124,9 @@ function showModalMenu() {
   }
   towerHealth = data.towerHealth;
   towerHealthStrip = 120;
+  // volleyArrowsCoolDown = false;
+  // if (volleyArrowsCoolDown) toggleVolleyArrowsCooldown();
+  window.clearInterval();
   modalMenu.showModal();
 }
 
@@ -137,7 +150,7 @@ buttonUpDamage.addEventListener("click", handleClickButtonUpDamage);
 buttonUpRecharge.addEventListener("click", handleClickButtonUpRate);
 buttonUpHealth.addEventListener("click", handleClickButtonUpHealth);
 buttonUpVolley.addEventListener("click", handleClickButtonUpVolley);
-
+buttonUpMultishot.addEventListener("click", handleClickButtonUpMultishot);
 buttonUpVolleyWave.addEventListener("click", handleClickButtonUpVolleyWave);
 
 buttonMenu.addEventListener("click", () => {
@@ -180,13 +193,10 @@ function shot() {
       let timerId = setTimeout(function tick() {
         if (animation == true) {
           playSoundShot();
+          let data = getData();
+          let multishot = data.multishotLvl;
 
-          arrows.push({
-            x: 80,
-            y: 390,
-            speed: data.arrowSpeed,
-            direction: angle - 90,
-          });
+          getArrowsForShot(multishot, angle);
 
           crossbow.style.animation = `reloaded 0.${data.rechargeTime}s linear infinite`;
           coolDown = true;
@@ -213,6 +223,19 @@ window.onload = function () {
   showModalMenu();
 };
 
+const requestAnimationFrame = (function () {
+  return (
+    window.requestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.mozRequestAnimationFrame ||
+    window.oRequestAnimationFrame ||
+    window.msRequestAnimationFrame ||
+    function (callback) {
+      window.setTimeout(callback, 1000 / 20);
+    }
+  );
+})();
+
 function game() {
   if (animation) {
     update();
@@ -224,8 +247,8 @@ function game() {
 function update() {
   gameFrame++;
 
-  vaveEnemies(gameFrame);
-
+  vaveEnemies(gameFrame, 1);
+  // infiniteVave(gameFrame, towerHealth);
   if (towerHealth <= 0) {
     showModalGameOver();
     // battleSound.load();
@@ -269,10 +292,16 @@ function update() {
       // анимация атаки
       if (gameFrame % 50 == 0) {
         towerHealth = towerHealth - enemies[item].damage;
-        let damage = towerHealth / enemies[item].damage;
-        towerHealthStrip -= towerHealthStrip / damage;
+        let damage = enemies[item].damage / towerHealth;
+        towerHealthStrip -= towerHealthStrip * damage;
         playSoundDamage();
       }
+      // if (gameFrame % 50 == 0) {
+      //   towerHealth = towerHealth - enemies[item].damage;
+      //   let damage = towerHealth / enemies[item].damage;
+      //   towerHealthStrip -= towerHealthStrip / damage;
+      //   playSoundDamage();
+      // }
     }
     // дистанционные атаки
     if (enemies[item].sprite == flyDemonSprite) {
@@ -338,6 +367,7 @@ function update() {
         y: deadCoordY,
         animX: 0,
       });
+      let coins = getCoins();
       coins += enemies[item].award;
       setCoins(coins);
       levelAward += enemies[item].award;
@@ -397,7 +427,8 @@ function render() {
       enemies[i].x,
       enemies[i].y,
       enemies[i].animation,
-      enemies[i].healthStrip
+      enemies[i].healthStrip,
+      enemies[i].lvl
     );
   }
   // рендер стрел

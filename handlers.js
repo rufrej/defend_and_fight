@@ -86,6 +86,17 @@ function handleClickButtonUpVolleyWave() {
   } else playSoundNotCompleted();
 }
 
+function handleClickButtonUpMultishot() {
+  const levelUpCost = data.multishotLvl * 10000;
+  if (levelUpCost <= coins && data.multishotLvl <= 5) {
+    playSoundButtonClick();
+
+    data.multishotLvl += 1;
+    saveChanges(levelUpCost);
+    console.log(data);
+  } else playSoundNotCompleted();
+}
+
 export {
   handleClickButtonShop,
   handleClickButtonUpDamage,
@@ -93,4 +104,5 @@ export {
   handleClickButtonUpRate,
   handleClickButtonUpVolley,
   handleClickButtonUpVolleyWave,
+  handleClickButtonUpMultishot,
 };
