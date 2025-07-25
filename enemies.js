@@ -70,7 +70,7 @@ const smallDemonSprite = new Enemies(
 );
 const flyDemonSprite = new Enemies(
   context,
-  "assets/enemies/flyDemon.avif",
+  "assets/enemies/flyDemon.webp",
   1358, //   indentLeft
   192, //   spriteSize
   130, //   size
