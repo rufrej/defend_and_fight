@@ -256,7 +256,7 @@ function update() {
   greenGoblinSprite.animate(gameFrame);
   redDemonSprite.animate(gameFrame);
   smallDemonSprite.animate(gameFrame);
-  flyDemonSprite.animate(gameFrame);
+  // flyDemonSprite.animate(gameFrame);
   minotaurWhiteSprite.animate(gameFrame);
   minotaurDarkSprite.animate(gameFrame);
 

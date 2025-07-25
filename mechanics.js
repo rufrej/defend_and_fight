@@ -164,9 +164,9 @@ function vaveEnemies(gameFrame, lvl) {
   if (gameFrame == 100) {
     buildLineEnemies(enemies, 6, 80, greenGoblin, lvl);
   }
-  if (gameFrame == 300) {
-    buildLineEnemies(enemies, 6, 80, flyDemon, lvl);
-  }
+  // if (gameFrame == 300) {
+  //   buildLineEnemies(enemies, 6, 80, flyDemon, lvl);
+  // }
 
   if (gameFrame == 500) {
     buildLineEnemies(enemies, 6, 80, smallDemon, lvl);
